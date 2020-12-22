@@ -1,0 +1,35 @@
+# image: node:12
+
+# before_script:
+#     - npm i --save --silent
+    
+# stages:
+#     - test
+#     - deploy
+
+# tests:
+#   stage: test
+#   script: npm test
+
+# deploy:
+#   stage: deploy
+#   script:
+#       # Install ssh-agent if not already installed, it is required by Docker.
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#       # Run ssh-agent (inside the build environment)
+#     - eval $(ssh-agent -s)
+#       # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+#     - ssh-add <(echo "$SSH_PRIVATE_KEY_PPOSR")
+#     - mkdir -p ~/.ssh
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#       #original without excludes
+#     - tar zcf ../$CI_PROJECT_NAME.tar.gz --exclude=screenshots --exclude=node_modules ./
+#     - scp -o StrictHostKeyChecking=no ../$CI_PROJECT_NAME.tar.gz pposr@34.121.217.0:~/kk
+#       #remove and create new folder name kukkui-sertis-lab-backend
+#     - ssh pposr@34.121.217.0 'rm -rf ~/kk/kukkui-sertis-lab-backend'
+#     - ssh pposr@34.121.217.0 'mkdir ~/kk/kukkui-sertis-lab-backend'
+#       #extract with exclude
+#     - ssh pposr@34.121.217.0 'tar -xf ~/kk/kukkui-sertis-lab-backend.tar.gz -C ~/kk/kukkui-sertis-lab-backend/ --exclude=screenshots --exclude=node_modules'
+#     - ssh pposr@34.121.217.0 '/usr/local/bin/pm2 delete index'
+#     - ssh pposr@34.121.217.0 '/usr/local/bin/pm2 start ~/kk/kukkui-sertis-lab-backend/index.js'
+
