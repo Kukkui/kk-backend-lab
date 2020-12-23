@@ -426,7 +426,7 @@ exports.myposts = <span class="fstat-no" title="function not covered" >as</span>
     const username = <span class="cstat-no" title="statement not covered" >sess.username;</span>
     const password = <span class="cstat-no" title="statement not covered" >sess.password;</span>
     // check for authenticated
-<span class="cstat-no" title="statement not covered" >    auth.findOne({username: username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
+<span class="cstat-no" title="statement not covered" >    auth.findOne({username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
 <span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >throw err;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (user) {</span>
         // compare password from session username and password
@@ -435,7 +435,7 @@ exports.myposts = <span class="fstat-no" title="function not covered" >as</span>
           // username and password was found(authenticted isMatch)
 <span class="cstat-no" title="statement not covered" >          if (isMatch) {</span>
             //
-<span class="cstat-no" title="statement not covered" >            accounts.find({username: username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, posts) {</span>
+<span class="cstat-no" title="statement not covered" >            accounts.find({username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, posts) {</span>
 <span class="cstat-no" title="statement not covered" >              if (err) <span class="cstat-no" title="statement not covered" >return next(err);</span></span>
 <span class="cstat-no" title="statement not covered" >              console.log(posts);</span>
 <span class="cstat-no" title="statement not covered" >              res.send(posts);</span>
@@ -464,7 +464,7 @@ exports.addposts = <span class="fstat-no" title="function not covered" >as</span
     const sess = <span class="cstat-no" title="statement not covered" >req.session;</span>
     const username = <span class="cstat-no" title="statement not covered" >sess.username;</span>
     const password = <span class="cstat-no" title="statement not covered" >sess.password;</span>
-<span class="cstat-no" title="statement not covered" >    auth.findOne({username: username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
+<span class="cstat-no" title="statement not covered" >    auth.findOne({username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
 <span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >throw err;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (user) {</span>
 <span class="cstat-no" title="statement not covered" >        authMock.correctPassword(password, <span class="fstat-no" title="function not covered" >fu</span>nction(err, isMatch) {</span>
@@ -519,7 +519,7 @@ exports.editposts = <span class="fstat-no" title="function not covered" >as</spa
     const sess = <span class="cstat-no" title="statement not covered" >req.session;</span>
     const username = <span class="cstat-no" title="statement not covered" >sess.username;</span>
     const password = <span class="cstat-no" title="statement not covered" >sess.password;</span>
-<span class="cstat-no" title="statement not covered" >    auth.findOne({username: username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
+<span class="cstat-no" title="statement not covered" >    auth.findOne({username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
 <span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >throw err;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (user) {</span>
 <span class="cstat-no" title="statement not covered" >        authMock.correctPassword(password, <span class="fstat-no" title="function not covered" >fu</span>nction(err, isMatch) {</span>
@@ -535,7 +535,7 @@ exports.editposts = <span class="fstat-no" title="function not covered" >as</spa
             };
 <span class="cstat-no" title="statement not covered" >            accounts.findOneAndUpdate({</span>
               _id: req.params.id,
-              username: username,
+              username,
             }, postobj, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {
 <span class="cstat-no" title="statement not covered" >              if (err) <span class="cstat-no" title="statement not covered" >console.log(err);</span></span>
 <span class="cstat-no" title="statement not covered" >              console.log('Successful edit');</span>
@@ -568,7 +568,7 @@ exports.deleteposts = <span class="fstat-no" title="function not covered" >as</s
     const sess = <span class="cstat-no" title="statement not covered" >req.session;</span>
     const username = <span class="cstat-no" title="statement not covered" >sess.username;</span>
     const password = <span class="cstat-no" title="statement not covered" >sess.password;</span>
-<span class="cstat-no" title="statement not covered" >    auth.findOne({username: username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
+<span class="cstat-no" title="statement not covered" >    auth.findOne({username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {</span>
 <span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >throw err;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (user) {</span>
 <span class="cstat-no" title="statement not covered" >        authMock.correctPassword(password, <span class="fstat-no" title="function not covered" >fu</span>nction(err, isMatch) {</span>
@@ -576,7 +576,7 @@ exports.deleteposts = <span class="fstat-no" title="function not covered" >as</s
 <span class="cstat-no" title="statement not covered" >          if (isMatch) {</span>
 <span class="cstat-no" title="statement not covered" >            accounts.deleteOne({</span>
               _id: req.params.id,
-              username: username,
+              username,
             }, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {
 <span class="cstat-no" title="statement not covered" >              if (err) <span class="cstat-no" title="statement not covered" >console.log(err);</span></span>
 <span class="cstat-no" title="statement not covered" >              console.log('Successful deletion');</span>

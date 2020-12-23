@@ -368,7 +368,7 @@ exports.deleteModeResult = async function(sess, uu, pp, pid) {
     const result = await accounts.deleteOne(
         {
           _id: pid,
-          username: username,
+          username,
         },
 <span class="fstat-no" title="function not covered" >        (e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >          if (err) {</span>

@@ -6,7 +6,6 @@ const {deleteModel} = require('mongoose');
 const auth = require('../models/auth.model');
 const accounts = require('../models/user.model');
 const userfn = require('../helper/user.helper');
-// Async/Await lab playground
 exports.myposts = async (req, res, next) => {
   const uu = req.body.username;
   const pp = req.body.password;
@@ -15,7 +14,7 @@ exports.myposts = async (req, res, next) => {
   const pid = null;
   try {
     const mode = 'view';
-    const UserPass= await userfn.sessionx(sess, uu, pp);
+    const UserPass = await userfn.sessionx(sess, uu, pp);
     const user = await auth.findOne({username: UserPass[0]});
     const isMatched = await userfn.usernameCheck(user, sess, uu, pp);
     const showResult = await userfn.finalResultFromMode(isMatched, mode, sess, uu, pp, obj, null);
@@ -24,7 +23,6 @@ exports.myposts = async (req, res, next) => {
     throw err;
   }
 };
-
 exports.addposts = async (req, res, next) => {
   const uu = req.body.username;
   const pp = req.body.password;
@@ -42,7 +40,6 @@ exports.addposts = async (req, res, next) => {
     throw err;
   }
 };
-
 exports.allposts = async (req, res, next) => {
   try {
     const result = await accounts.find({});
@@ -69,7 +66,6 @@ exports.editposts = async (req, res, next) => {
     throw err;
   }
 };
-
 exports.deleteposts = async (req, res, next) => {
   const uu = req.body.username;
   const pp = req.body.password;

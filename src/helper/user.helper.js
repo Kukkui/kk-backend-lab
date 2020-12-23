@@ -7,9 +7,6 @@ const auth = require('../models/auth.model');
 const userfn = require('../helper/user.helper');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-// Async/Await lab playground
-// Sub functions listed here...
-
 exports.sessionx = async function(sess, uu, pp) {
   let username = uu;
   let password = pp;
@@ -19,8 +16,6 @@ exports.sessionx = async function(sess, uu, pp) {
   }
   return await [username, password];
 };
-
-
 exports.usernameCheck = async function(user, sess, uu, pp) {
   try {
     const [username, password] = await this.sessionx(sess, uu, pp);
@@ -31,8 +26,6 @@ exports.usernameCheck = async function(user, sess, uu, pp) {
     throw error;
   }
 };
-
-
 exports.viewModeResult = async function(sess, uu, pp) {
   const username = uu;
   const password = pp;
@@ -59,8 +52,6 @@ exports.editModeResult = async function(sess, uu, pp, obj, pid) {
     throw error;
   }
 };
-
-
 exports.addModeResult = async function(obj) {
   try {
     const result = await accounts.create(obj);

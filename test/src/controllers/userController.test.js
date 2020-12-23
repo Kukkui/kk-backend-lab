@@ -6,12 +6,16 @@ const assert = require('chai').assert;
 const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 describe('(2) userController.js : control the blogposts on CRUD processes.', () => {
-  let authMock; let accountsMock; let postioMock;
-  let comparePasswordStub;
+  let authMock;
+  let accountsMock;
   let userController;
-  let user; let req; let res; let next; let post; let jsonStub;
+  let user;
+  let req;
+  let res;
+  let next;
+  let post;
+  let jsonStub;
   let initUserController;
-  let result;
   let userfnMock;
   let showResult;
 
@@ -72,6 +76,7 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
 
   describe('.myposts()', () => {
     it('should call .myposts() correctly', async () => {
+      initUserController();
       userfnMock.sessionx.resolves(['test', 'test']);
       authMock.findOne.resolves({
         _id: 0,
@@ -92,15 +97,14 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
       };
       userfnMock.usernameCheck.resolves(true);
       userfnMock.finalResultFromMode.resolves(objTest);
-      initUserController();
-      await userController.myposts(req, res, next);
+
       assert.deepEqual(await userController.myposts(req, res, next), objTest);
     });
 
     it('should call .myposts() incorrectly with .sessionx throw error', async () => {
+      initUserController();
       const error = new Error('error');
       userfnMock.sessionx.throws(error);
-      initUserController();
       try {
         userController.myposts(req, res, next);
       } catch (error) {
@@ -110,12 +114,13 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
   });
   describe('.addposts()', ()=>{
     it(('should call .addposts() correctly'), async ()=>{
+      initUserController();
       req.body = {
         username: 'test',
         password: 'test',
       };
-      await userfnMock.sessionx.resolves(['test', 'test']);
-      await authMock.findOne.resolves({
+      userfnMock.sessionx.resolves(['test', 'test']);
+      authMock.findOne.resolves({
         _id: 0,
         username: 'test',
         password: 'test',
@@ -132,17 +137,15 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
           cardCategory: 'test',
           __v: 0,
         };
-      await userfnMock.usernameCheck.resolves(true);
-      await userfnMock.finalResultFromMode.resolves(objTest);
-      initUserController();
+      userfnMock.usernameCheck.resolves(true);
+      userfnMock.finalResultFromMode.resolves(objTest);
       assert.deepEqual(await userController.addposts(req, res, next), objTest);
-      // let result, error,usernamepassword,user,isMatch;
     });
 
     it('should call .addposts() incorrectly with .sessionx throw error', async () => {
+      initUserController();
       const error = new Error('error');
       userfnMock.sessionx.throws(error);
-      initUserController();
       try {
         userController.addposts(req, res, next);
       } catch (err) {
@@ -153,6 +156,7 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
 
   describe('.allposts()', ()=>{
     it(('should call allposts() correctly'), async ()=>{
+      initUserController();
       await userfnMock.sessionx.resolves(['test', 'test']);
       const objTest =
         {
@@ -166,15 +170,14 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
           __v: 0,
         };
       await accountsMock.find.resolves(objTest);
-      initUserController();
       await userController.allposts(req, res, next);
       assert.deepEqual(await userController.allposts(req, res, next), objTest);
       // let result, error,usernamepassword,user,isMatch;
     });
     it('should call .allposts() incorrectly with .find() throw error', async () => {
+      initUserController();
       const error = new Error('error');
       accountsMock.find.throws(error);
-      initUserController();
       try {
         userController.allposts(req, res, next);
       } catch (err) {
@@ -185,6 +188,7 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
 
   describe('.editposts()', ()=>{
     it(('should call .editposts() correctly'), async ()=>{
+      initUserController();
       req.params = {
         id: 0,
       };
@@ -208,12 +212,12 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
         };
       await userfnMock.usernameCheck.resolves(true);
       await userfnMock.finalResultFromMode.resolves(objTest);
-      initUserController();
       await userController.editposts(req, res, next);
       assert.deepEqual(await userController.editposts(req, res, next), objTest);
       // let result, error,usernamepassword,user,isMatch;
     });
     it('should call .editposts() incorrectly with all methods throw error', async () => {
+      initUserController();
       const error = new Error('error');
       userfnMock.sessionx.throws(error);
       authMock.findOne.throws(error);
@@ -233,7 +237,6 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
       };
 
       try {
-        initUserController();
         await userController.editposts(req, res, next);
         assert.deepEqual(await userController.editposts(req, res, next), objTest);
       } catch (error) {
@@ -244,7 +247,7 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
 
   describe('.deleteposts()', ()=>{
     it(('should call .deleteposts() correctly'), async ()=>{
-      const error = new Error('error');
+      initUserController();
       req.params = {id: 0};
       userfnMock.sessionx.resolves(['test', 'test']);
       authMock.findOne.resolves({
@@ -266,18 +269,17 @@ describe('(2) userController.js : control the blogposts on CRUD processes.', () 
         };
       userfnMock.usernameCheck.resolves(true);
       userfnMock.finalResultFromMode.resolves(objTest);
-      initUserController();
       await userController.deleteposts(req, res, next);
       assert.deepEqual(await userController.deleteposts(req, res, next), objTest);
     });
     it('should call .deleteposts() incorrectly with .sessionx throw error', async () => {
+      initUserController();
       const error = new Error('error');
       userfnMock.sessionx.throws(error);
       authMock.findOne.throws(error);
       userfnMock.usernameCheck.throws(error);
       userfnMock.finalResultFromMode.throws(error);
       req.params = {id: 0};
-      initUserController();
       try {
         await userController.deleteposts(req, res, next);
         // assert.deepEqual(await userController.deleteposts(req, res, next), objTest);

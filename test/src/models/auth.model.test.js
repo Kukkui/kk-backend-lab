@@ -10,18 +10,11 @@ const sinon = require('sinon');
 describe('(5) auth.model.js : mongoose Schema and Configuration for \'auth\' model.', ()=>{
   let bcryptMock;
   let mongooseSchema;
-  let mongooseSchemaStub;
-  let comparePassword;
   let initAuthModel;
-  let mongoose;
   let pre;
   let next2;
   let psMock;
-  let preMock;
   let mongooseMock;
-  let nextspy;
-  let methods;
-  let accounts;
   let authModel;
   let authMock;
   let authMod;
@@ -73,8 +66,7 @@ describe('(5) auth.model.js : mongoose Schema and Configuration for \'auth\' mod
     };
     bcryptMock = {
       hash: sinon.stub().resolves('test'),
-      compare: sinon.stub().resolves(true),
-    };
+      compare: sinon.stub().resolves(true)};
     authMock={
       pre: sinon.stub(),
     };
@@ -93,12 +85,10 @@ describe('(5) auth.model.js : mongoose Schema and Configuration for \'auth\' mod
   });
   describe('.correctPassword()', () => {
     it('should work correctly', async () => {
-      const candidatePassword = 'candidatePassword';
+      initAuthModel();
       const tpassword = 'password';
       const opassword = 'password';
-      // methodsStub.password = password;
       bcryptMock.compare.resolves(true);
-      initAuthModel();
       assert.deepEqual(await methodsStub.correctPassword(tpassword, opassword), true);
       assert.deepEqual(bcryptMock.compare.args[0][0], tpassword);
       assert.deepEqual(bcryptMock.compare.args[0][1], opassword);
@@ -107,6 +97,7 @@ describe('(5) auth.model.js : mongoose Schema and Configuration for \'auth\' mod
 
   describe('.pre(save, func)', ()=>{
     it('should work correctly', async () => {
+      initAuthModel();
       const authMock = require('../../../src/models/auth.model');
       const newacc = new authMock({
         username: 'test',
@@ -120,13 +111,9 @@ describe('(5) auth.model.js : mongoose Schema and Configuration for \'auth\' mod
         pre: sinon.stub().returns(true),
       };
       newacc.save();
-      // console.log('\t', newacc);
-      const callPreSaveFn = await psMock.preSaveFunc.resolves(true);
       next2.pre.returns(true);
       bcryptMock.compare.resolves(true);
       assert.deepEqual(await next2.pre('save', next), true);
-      // assert.deepEqual(bcryptMock.compare.args[0][0], tpassword);
-      // assert.deepEqual(bcryptMock.compare.args[0][1], opassword);
     });
   });
 });

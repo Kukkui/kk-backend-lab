@@ -139,7 +139,7 @@ const generator = require('generate-password');
 exports.auth = async (req, res, next) =&gt;{
   try {
     const {username, password} = req.body;
-    auth.findOne({username: username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {
+    auth.findOne({username}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, user) {
 <span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >throw err;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (user) {</span>
 <span class="cstat-no" title="statement not covered" >        authMock.correctPassword(password, <span class="fstat-no" title="function not covered" >fu</span>nction(err, isMatch) {</span>
@@ -160,7 +160,7 @@ exports.auth = async (req, res, next) =&gt;{
           length: 10,
           numbers: true,
         });
-<span class="cstat-no" title="statement not covered" >        auth.create({username: username, password: genPassword}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, result) {</span>
+<span class="cstat-no" title="statement not covered" >        auth.create({username, password: genPassword}, <span class="fstat-no" title="function not covered" >fu</span>nction(err, result) {</span>
 <span class="cstat-no" title="statement not covered" >          if (err) <span class="cstat-no" title="statement not covered" >return next(err);</span></span>
 <span class="cstat-no" title="statement not covered" >          console.log(result);</span>
 <span class="cstat-no" title="statement not covered" >          console.log(genPassword);</span>

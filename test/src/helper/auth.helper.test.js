@@ -6,14 +6,16 @@ const assert = require('chai').assert;
 const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 describe('(3) auth.helper.js : additional methods for authController.js', ()=>{
-  let _setsession;
   let comparePasswordStub;
   let authMock;
   let generatorMock;
   let initAuthHelper;
   let authHelper;
   let authfnMock;
-  let user; let req; let res; let next; let err;
+  let user;
+  let req;
+  let res;
+  let err;
   beforeEach(() => {
     user={};
     authMock = {
@@ -38,7 +40,6 @@ describe('(3) auth.helper.js : additional methods for authController.js', ()=>{
       send: sinon.stub().returns('DONE'),
     };
     err = null;
-    // Proxyquire here...
     initAuthHelper = () => {
       authHelper = proxyquire(
           '../../../src/helper/auth.helper',
@@ -49,11 +50,8 @@ describe('(3) auth.helper.js : additional methods for authController.js', ()=>{
           });
     };
   });
-
-  // After each here...
   afterEach(() => {
   });
-  // @ponicode
   describe('._checkpassword()', () => {
     it('should work correctly when \'checkMatch\' return true', async () => {
       initAuthHelper();
@@ -66,8 +64,8 @@ describe('(3) auth.helper.js : additional methods for authController.js', ()=>{
       assert.deepEqual(await authHelper._checkpassword(user, 'test', 'test'), false);
     });
     it('should throw error', async () => {
-      const error = new Error('error');
       initAuthHelper();
+      const error = new Error('error');
       user.correctPassword.throws(error);
       try {
         await authHelper._checkpassword(user, 'test', 'test');
@@ -84,23 +82,18 @@ describe('(3) auth.helper.js : additional methods for authController.js', ()=>{
         username: 'test',
         password: 123456789,
       });
-
       const password = await generatorMock.generate.returns('123456789');
       await authMock.create({username, password});
       const resx = await authHelper._createNewAccount({username, password});
       assert.deepEqual(resx.password, JSON.stringify(json.password));
     });
     it('should call _createNewAccount with an error', async () => {
+      initAuthHelper();
       const error = new Error('error');
       const username = 'test';
       const password = 'test';
-      const json = ({
-        username: 'test',
-        password: 123456789,
-      });
       generatorMock.generate.throws(error);
       authMock.create.throws(error);
-      initAuthHelper();
       try {
         authHelper._createNewAccount({username, password});
       } catch (e) {
@@ -121,6 +114,7 @@ describe('(3) auth.helper.js : additional methods for authController.js', ()=>{
       assert.deepEqual(await authHelper._setsession(req.session, setUser, setPass), true);
     });
     it('should throw error', async () => {
+      initAuthHelper();
       req.session={
         username: 'test',
         password: 'test',
@@ -129,7 +123,6 @@ describe('(3) auth.helper.js : additional methods for authController.js', ()=>{
       const setPass = 'setPass';
       const error = new Error('error');
       authfnMock._setsession.throws(error);
-      initAuthHelper();
       try {
         await authHelper._setsession(req.session, setUser, setPass);
       } catch (error) {

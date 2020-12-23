@@ -6,10 +6,18 @@ const assert = require('chai').assert;
 const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 describe('(4) user.helper.js : additional methods for userController.js', () => {
-  let authMock; let accountsMock; let postioMock;
-  let comparePassword; let comparePasswordStub;
+  let authMock;
+  let accountsMock;
+  let postioMock;
+  let comparePassword;
+  let comparePasswordStub;
   let userController;
-  let user; let req; let res; let next; let post; let jsonStub;
+  let user;
+  let req;
+  let res;
+  let next;
+  let post;
+  let jsonStub;
   let initUserController;
   let UserPass;
   let result;
@@ -103,6 +111,7 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
       const sess = req.session;
       const uu = req.body.username;
       const pp = req.body.password;
+
       initUserHelper();
       assert.deepEqual(await userHelper.sessionx(sess, uu, pp), ['test2', 'test2']);
       // let result, error,usernamepassword,user,isMatch;
@@ -117,6 +126,7 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
       const sess = req.session;
       const uu = req.body.username;
       const pp = req.body.password;
+
       initUserHelper();
       assert.deepEqual(await userHelper.sessionx(sess, uu, pp), ['test', 'test']);
     });
@@ -136,8 +146,9 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
       const user = req.body;
       const uu = req.body.username;
       const pp = req.body.password;
-      await userfnMock.sessionx.resolves(['test', 'test']);
-      await bcryptMock.compare.resolves(true);
+      userfnMock.sessionx.resolves(['test', 'test']);
+      bcryptMock.compare.resolves(true);
+
       initUserHelper();
       const objRes = await userHelper.sessionx(sess, uu, pp);
       await bcryptMock.compare(objRes.password, user.password);
@@ -158,6 +169,7 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
       const pp = req.body.password;
       await userfnMock.sessionx.resolves(['test2', 'test2']);
       await bcryptMock.compare.resolves(false);
+
       initUserHelper();
       const objRes = await userHelper.sessionx(sess, uu, pp);
       await bcryptMock.compare(objRes.password, user.password);
@@ -179,6 +191,7 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
       const user = req.body;
       const uu = req.body.username;
       const pp = req.body.password;
+
       initUserHelper();
       try {
         await userHelper.usernameCheck(user, sess, uu, pp);
@@ -190,22 +203,20 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
 
   describe('._viewModeResult()', () => {
     it('should call ._viewModeResult() correctly', async () => {
-      // initUserHelper();
       const uu = 'test';
       const pp = 'test';
       req.session= {username: 'test', password: 'test'};
       const sess = req.session;
+      userfnMock.sessionx.resolves(['test', 'test']);
+      accountsMock.find.resolves({username: 'test', password: 'test'});
 
       initUserHelper();
-      await userfnMock.sessionx.resolves(['test', 'test']);
-      await accountsMock.find.resolves({username: 'test', password: 'test'});
       assert.deepEqual(await userHelper.viewModeResult(sess, uu, pp), {username: 'test', password: 'test'});
     });
     it('should call ._viewModeResult() with throw error', async () => {
       const error = new Error('error');
       userfnMock.sessionx.throws(error);
       accountsMock.find.throws(error);
-      // initUserHelper();
       const uu = 'test';
       const pp = 'test';
       req.session= {username: 'test', password: 'test'};
@@ -242,8 +253,9 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
         cardCategory: 'new cardcategory',
       };
       const obj =req.body;
+      accountsMock.findOneAndUpdate.resolves(obj);
+
       initUserHelper();
-      await accountsMock.findOneAndUpdate.resolves(obj);
       assert.deepEqual(await userHelper.editModeResult(sess, uu, pp, obj, pid), obj);
     });
     it('should call ._editModeResult() incorrectly with throw error', async ()=>{
@@ -270,6 +282,7 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
         cardCategory: 'new cardcategory',
       };
       const obj =req.body;
+
       initUserHelper();
       try {
         await userHelper.editModeResult(sess, uu, pp, obj, pid);
@@ -308,6 +321,7 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
   });
   describe('._deleteModeResult()', () =>{
     it('should call ._deleteModeResult() correctly', async ()=>{
+      initUserHelper();
       const uu = 'test';
       const pp = 'test';
       req.params={
@@ -319,12 +333,12 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
         password: 'test',
       };
       const sess= req.session;
-      await userfnMock.sessionx.resolves(['test', 'test']);
-      await accountsMock.deleteOne.resolves('DONE DELETION');
-      initUserHelper();
+      userfnMock.sessionx.resolves(['test', 'test']);
+      accountsMock.deleteOne.resolves('DONE DELETION');
       assert.deepEqual(await userHelper.deleteModeResult(sess, uu, pp, pid), ('DONE DELETION'));
     });
     it('should call ._deleteModeResult incorrectly with throw error', async ()=>{
+      initUserHelper();
       const error = new Error('error');
       userfnMock.sessionx.throws(error);
       accountsMock.deleteOne.throws(error);
@@ -339,7 +353,6 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
         password: 'test',
       };
       const sess= req.session;
-      initUserHelper();
       try {
         await userHelper.deleteModeResult(sess, uu, pp, pid);
       } catch (error) {
@@ -349,6 +362,7 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
 
   describe('._finalResultFromMode()', () =>{
     it('should call ._finalResultFromMode() correctly', async ()=>{
+      initUserHelper();
       const uu = 'test';
       const pp = 'test';
       req.params={
@@ -376,17 +390,15 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
       await userfnMock.addModeResult.resolves('Call Add Function');
       await userfnMock.editModeResult.resolves('Call Edit Function');
       await userfnMock.deleteModeResult.resolves('Call Delete Function');
-      initUserHelper();
+
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'view', sess, uu, pp, obj, pid), ('Call View Function'));
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'add', sess, uu, pp, obj, pid), ('Call Add Function'));
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'edit', sess, uu, pp, obj, pid), ('Call Edit Function'));
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'delete', sess, uu, pp, obj, pid), ('Call Delete Function'));
     });
-
     it('should call ._finalResultFromMode() correctly with isMatch equal to false', async ()=>{
-      const error= new Error('error');
+      initUserHelper();
       const isMatch=false;
-
       const uu = 'test';
       const pp = 'test';
       req.params={
@@ -408,14 +420,13 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
         cardCategory: 'new cardcategory',
       };
       const obj =req.body;
-      initUserHelper();
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'view', sess, uu, pp, obj, pid), false);
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'add', sess, uu, pp, obj, pid), false);
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'edit', sess, uu, pp, obj, pid), false);
       assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'delete', sess, uu, pp, obj, pid), false);
     });
-
     it('should call ._finalResultFromMode() incorrectly with throw error', async ()=>{
+      initUserHelper();
       const error= new Error('error');
       userfnMock.sessionx.throws(error);
       userfnMock.viewModeResult.throws(error);
@@ -444,7 +455,6 @@ describe('(4) user.helper.js : additional methods for userController.js', () => 
       };
       const obj =req.body;
       const isMatch = true;
-      initUserHelper();
       try {
         assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'view', sess, uu, pp, obj, pid), ('Call View Function'));
         assert.deepEqual(await userHelper.finalResultFromMode(isMatch, 'add', sess, uu, pp, obj, pid), ('Call Add Function'));

@@ -87,12 +87,11 @@ describe('(7) user.model.js: mongoose Schema and Configuration for \'user\' mode
   });
   describe('.correctPassword()', () => {
     it('should work correctly', async () => {
+      initUserModel();
       const candidatePassword = 'candidatePassword';
       const tpassword = 'password';
       const opassword = 'password';
-      // methodsStub.password = password;
       bcryptMock.compare.resolves(true);
-      initUserModel();
       assert.deepEqual(await methodsStub.correctPassword(tpassword, opassword), true);
       assert.deepEqual(bcryptMock.compare.args[0][0], tpassword);
       assert.deepEqual(bcryptMock.compare.args[0][1], opassword);
@@ -101,7 +100,7 @@ describe('(7) user.model.js: mongoose Schema and Configuration for \'user\' mode
 
   describe('.pre(save, func)', ()=>{
     it('should work correctly', async () => {
-      initUserModel;
+      initUserModel();
       const userMock = require('../../../src/models/user.model');
       const newpost = new userMock({
         username: 'test',
@@ -125,7 +124,6 @@ describe('(7) user.model.js: mongoose Schema and Configuration for \'user\' mode
         pre: sinon.stub().returns(true),
       };
       newpost.save();
-      const callPreSaveFn = await psMock.preSaveFunc.resolves(true);
       next2.pre.returns(true);
       bcryptMock.compare.resolves(true);
       assert.deepEqual(await next2.pre('save', next), true);
